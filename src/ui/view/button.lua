@@ -18,6 +18,7 @@ ControlState = {
 
 ---@class Button: UI
 ---@field text string?
+---@field isButtonPressed boolean
 ---@field align love.AlignMode
 ---@field stateAppearance table<ControlState, Appearance>
 ---@field state ControlState
@@ -36,26 +37,26 @@ function Button:new(frame, className)
       Button.className = className
    end
 
-   local _button = UI:new(frame, Button.className)
+   local this = UI:new(frame, Button.className)
    ---@type Appearance
    local appearance = {
       backgroundColor = Colors.CLEAR,
       textColor = Colors.BLACK,
    }
-   _button.stateAppearance = {
+   this.stateAppearance = {
       [ControlState.NORMAL] = appearance,
    }
-   _button.state = ControlState.NORMAL
-   _button.text = nil
+   this.state = ControlState.NORMAL
+   this.text = nil
 
    local _label = Label:new(frame)
-   _button._label = _label
+   this._label = _label
 
-   setmetatable(_button, self)
+   setmetatable(this, self)
 
    self.__index = self
 
-   return _button
+   return this
 end
 
 -- Overrides
@@ -65,12 +66,16 @@ function Button:processMouseEvent(event)
    if event.eventType ~= "mouseLeftButton" then return end
 
    if event.type == "mousepressed" then
+      self.isButtonPressed = true
       self.state = ControlState.HIGHLIGHTED
-   else
-      self.state = ControlState.NORMAL
+      return
    end
 
-   UI.processMouseEvent(self, event)
+   if self.isButtonPressed then
+      self.state = ControlState.NORMAL
+      self.isButtonPressed = false
+      UI.processMouseEvent(self, event)
+   end
 end
 
 -- Button specific

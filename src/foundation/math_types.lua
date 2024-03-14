@@ -96,25 +96,15 @@ end
 ---@return boolean
 ---@deprecated Wrong behavior here. What if there is a rotation on the frame
 function Frame:isPointInside(point)
-   -- A-------B
-   -- |       |
-   -- D-------C
-   local a = self.origin
-   local b = Vector2D:new(self.origin.x + self.size.width, self.origin.y)
-   local c = Vector2D:new(self.origin.x + self.size.width, self.origin.y + self.size.height)
-   local d = Vector2D:new(self.origin.x, self.origin.y + self.size.height)
+   local minX = self.origin.x
+   local maxX = self.origin.x + self.size.width
+   local minY = self.origin.y
+   local maxY = self.origin.y + self.size.height
 
-   local ab = Vector2D.vector(a, b)
-   local ap = Vector2D.vector(a, point)
-   local bc = Vector2D.vector(b, c)
-   local bp = Vector2D.vector(b, point)
+   local isInsideWidth = minX <= point.x and maxX >= point.x
+   local isInsideHeight = minY <= point.y and maxY >= point.y
 
-   local dotAbAp = Vector2D.dot(ab, ap)
-   local dotAbAb = Vector2D.dot(ab, ab)
-   local dotBcBp = Vector2D.dot(bc, bp)
-   local dotBcBc = Vector2D.dot(bc, bc)
-
-   return 0 <= dotAbAp and dotAbAp < dotAbAb and 0 <= dotBcBp and dotBcBp <= dotBcBc
+   return isInsideWidth and isInsideHeight
 end
 
 ---@return Frame

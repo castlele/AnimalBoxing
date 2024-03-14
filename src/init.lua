@@ -29,7 +29,8 @@ function Draw()
    if Config.isDebug then
       local fps = love.timer.getFPS()
 
+      love.graphics.push()
       love.graphics.print("FPS: " .. tostring(fps))
-      World:draw()
+      love.graphics.pop()
    end
 end

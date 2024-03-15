@@ -2,6 +2,7 @@ local UI = require("src.ui.view.base_ui")
 local Button = require("src.ui.view.button")
 local Grid = require("src.game.views.grid")
 local PlayersCard = require("src.game.views.players_card")
+local SceneSelection = require("src.game.views.scene_selection")
 local characters = require("src.entities.characters")
 local colors = require("src.ui.view.colors")
 
@@ -101,7 +102,11 @@ end
 function PlayerSelection:draw()
    UI.draw(self)
 
+   love.graphics.push()
+
    if self.selectedLeft then
+      -- TODO: move to Image subview
+      love.graphics.setColor({0,0,0})
       love.graphics.draw(
          self.selectedLeft.spriteSheet,
          100,
@@ -110,12 +115,16 @@ function PlayerSelection:draw()
    end
 
    if self.selectedRight then
+      -- TODO: move to Image subview
+      love.graphics.setColor({0,0,0})
       love.graphics.draw(
          self.selectedRight.spriteSheet,
          300,
          50
       )
    end
+
+   love.graphics.pop()
 end
 
 -- Private methods
@@ -155,7 +164,9 @@ function PlayerSelection:configureContinueButton()
    local continueButton = Button:new(continueButtonFrame)
 
    continueButton:setBackgroundColor(colors.RED, ControlState.NORMAL)
-   continueButton:addTapGestureRecognizer(function (_) print("Fuck you") end)
+   continueButton:addTapGestureRecognizer(function (_)
+      self:present(SceneSelection:new(self.frame))
+   end)
 
    self.continueButton = continueButton
    self.continueButton.isHidden = false

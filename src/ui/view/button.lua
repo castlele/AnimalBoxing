@@ -17,6 +17,7 @@ ControlState = {
 
 
 ---@class Button: UI
+---@field isFocused boolean
 ---@field text string?
 ---@field isButtonPressed boolean
 ---@field align love.AlignMode
@@ -74,6 +75,7 @@ function Button:processMouseEvent(event)
    if self.isButtonPressed then
       self.state = ControlState.NORMAL
       self.isButtonPressed = false
+
       UI.processMouseEvent(self, event)
    end
 end
@@ -130,20 +132,30 @@ function Button:update(dt)
    self:applyAppearance()
 end
 
+function Button:draw()
+   UI.draw(self)
+
+   if self.isFocused then
+      self.borderColor = { 1, 0, 0 }
+   else
+      self.borderColor = { 1, 1, 1, 0 }
+   end
+end
+
 -- Private methods
 
 ---@private
 function Button:updateState()
-   if not love.mouse.isDown(1) then
-      local pos = Vector2D:new(love.mouse.getPosition())
+   if love.mouse.isDown(1) then return end
 
-      local hovered = ControlState.HOVERED
+   local pos = Vector2D:new(love.mouse.getPosition())
 
-      if self.frame:isPointInside(pos) and self.stateAppearance[hovered] then
-         self.state = hovered
-      else
-         self.state = ControlState.NORMAL
-      end
+   local hovered = ControlState.HOVERED
+
+   if self.frame:isPointInside(pos) and self.stateAppearance[hovered] then
+      self.state = hovered
+   else
+      self.state = ControlState.NORMAL
    end
 end
 

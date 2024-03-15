@@ -8,8 +8,10 @@ local colors = require("src.ui.view.colors")
 ---@field subviews table<UI>
 ---@field frame Frame
 ---@field backgroundColor table
+---@field borderColor table
 ---@field isInteractionsEnables boolean
 ---@field tapGestureRecognizers table<fun(view: UI)>
+---@field listeners table<fun(view: UI)>
 ---@field presentedUI UI?
 ---@field presentingUI UI?
 ---@field _logger Logger
@@ -42,8 +44,10 @@ function UI:new(frame, className)
       isHidden = false,
       subviews = {},
       backgroundColor = {1, 1, 1},
+      borderColor = {1, 1, 1, 0},
       isInteractionsEnables = true,
       tapGestureRecognizers = {},
+      listeners = {},
       presentedUI = nil,
       presentingUI = nil,
    }
@@ -91,6 +95,12 @@ end
 ---@param callback fun(view: T)
 function UI:addTapGestureRecognizer(callback)
    table.insert(self.tapGestureRecognizers, callback)
+end
+
+---@generic T : UI
+---@param callback fun(view: T)
+function UI:addListener(callback)
+   table.insert(self.listeners, callback)
 end
 
 ---@param event MouseEvent
@@ -148,6 +158,10 @@ end
 
 ---@param dt number
 function UI:update(dt)
+   for _, listener in pairs(self.listeners) do
+      listener(self)
+   end
+
    if self.presentedUI then
       self.presentedUI:update(dt)
    else
@@ -168,6 +182,15 @@ function UI:draw()
       love.graphics.setColor(self.backgroundColor)
       love.graphics.rectangle(
          "fill",
+         self.frame.origin.x,
+         self.frame.origin.y,
+         self.frame.size.width,
+         self.frame.size.height
+      )
+
+      love.graphics.setColor(self.borderColor)
+      love.graphics.rectangle(
+         "line",
          self.frame.origin.x,
          self.frame.origin.y,
          self.frame.size.width,
@@ -196,7 +219,9 @@ end
 
 ---@private
 function UI:drawDebugInfoIfNeeded()
-   if not Config.isDebug then return end
+   local alpha = self.borderColor[4] or 1
+
+   if not Config.isDebug or alpha == 1 then return end
 
    love.graphics.setColor(colors.BLACK)
 

@@ -1,12 +1,17 @@
 local UI = require("src.ui.view.base_ui")
 local MainMenu = require("src.game.views.main_menu")
 local Players = require("src.entities")
+local Scenes = require("src.scenes")
 
 
 ---@class Game: UI
 ---@field rootUIObject UI?
 ---@field players Players
 ---@field scenes Scenes
+---@field mainControl string
+---| "mouse"
+---| "joystick"
+---@field mainJoystick love.Joystick?
 local Game = UI:new(
    Frame:new(
       Vector2D:new(0, 0),
@@ -29,7 +34,9 @@ end
 
 function Game:load()
    self.className = "Game"
+   self:setupMainControl()
    self.players = Players:new()
+   self.scenes = Scenes:new()
 
    if self.rootUIObject == nil then
       self.rootUIObject = MainMenu:new(self.frame)
@@ -50,6 +57,19 @@ function Game:draw()
    UI.draw(self)
 
    self.rootUIObject:draw()
+end
+
+--Private methods
+
+function Game:setupMainControl()
+   if love.joystick.getJoystickCount() == 0 then
+      self.mainControl = "mouse"
+      self.mainJoystick = nil
+      return
+   end
+
+   self.mainControl = "joystick"
+   self.mainJoystick =  love.joystick.getJoysticks()[1]
 end
 
 

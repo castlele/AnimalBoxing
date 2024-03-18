@@ -77,7 +77,7 @@ end
 -- Life cycle
 
 function mainMenu:load()
-   local gamepadTapListener = function (button)
+   local gamepadTapListener = function (_)
       -- TODO: Move to event handling???
       if Game.mainControl == "joystick" and Game.mainJoystick then
          if Game.mainJoystick:isGamepadDown("a") then

@@ -1,5 +1,6 @@
 local UI = require("src.ui.view.base_ui")
 local Button = require("src.ui.view.button")
+local Image = require("src.ui.view.image")
 local Grid = require("src.game.views.grid")
 local PlayersCard = require("src.game.views.players_card")
 local SceneSelection = require("src.game.views.scene_selection")
@@ -10,6 +11,8 @@ local colors = require("src.ui.view.colors")
 ---@class PlayerSelection: UI
 ---@field backButton Button
 ---@field continueButton Button
+---@field leftPlayerCharacter Image
+---@field rightPlayerCharacter Image
 ---@field numberOfPlayers integer
 ---@field characters Characters
 ---@field selectedLeft Character?
@@ -67,11 +70,19 @@ end
 function PlayerSelection:new(frame)
    ---@type PlayerSelection
    local ps = UI:new(frame, PlayerSelection.className)
+
+   local leftImageOrigin = Vector2D:new(100, 100)
+   local rightImageOrigin = Vector2D:new(300, 100)
+
    -- TODO: Make it dynamic
    ps.numberOfPlayers = 2
    ps.characters = characters
+   ps.leftPlayerCharacter = Image:new(Frame:new(leftImageOrigin, Size:new(50, 50)))
+   ps.rightPlayerCharacter = Image:new(Frame:new(rightImageOrigin, Size:new(50, 50)))
+   ps.leftPlayerCharacter.backgroundColor = { 0, 0, 0, 0 }
+   ps.rightPlayerCharacter.backgroundColor = { 0, 0, 0, 0 }
    ps.selectedLeft = Game.players.player1.character
-   ps.selectedRight = nil
+   ps.selectedRight = Game.players.player2.character
 
    ps.backgroundColor = UI.colors.background
 
@@ -85,6 +96,7 @@ end
 -- Life Cycle
 
 function PlayerSelection:load()
+   self:configurePlayersPreviews()
    self:configureBackButton()
    self:configureContinueButton()
    self:layoutPlayerSelectionGrids()
@@ -97,37 +109,16 @@ function PlayerSelection:update(dt)
    UI.update(self, dt)
 
    self:showContinueButtonIfPossible()
-end
-
-function PlayerSelection:draw()
-   UI.draw(self)
-
-   love.graphics.push()
-
-   if self.selectedLeft then
-      -- TODO: move to Image subview
-      love.graphics.setColor({0,0,0})
-      love.graphics.draw(
-         self.selectedLeft.spriteSheet,
-         100,
-         50
-      )
-   end
-
-   if self.selectedRight then
-      -- TODO: move to Image subview
-      love.graphics.setColor({0,0,0})
-      love.graphics.draw(
-         self.selectedRight.spriteSheet,
-         300,
-         50
-      )
-   end
-
-   love.graphics.pop()
+   self:updatePlayersPreviews()
 end
 
 -- Private methods
+
+function PlayerSelection:configurePlayersPreviews()
+   -- TODO: Move all images configurations here
+   self:addSubview(self.leftPlayerCharacter)
+   self:addSubview(self.rightPlayerCharacter)
+end
 
 ---@private
 function PlayerSelection:configureBackButton()
@@ -171,6 +162,27 @@ function PlayerSelection:configureContinueButton()
    self.continueButton = continueButton
    self.continueButton.isHidden = false
    self:addSubview(self.continueButton)
+end
+
+function PlayerSelection:updatePlayersPreviews()
+   local p1 = Game.players.player1
+   local p2 = Game.players.player2
+
+   if p1.character then
+      self.leftPlayerCharacter.isHidden = false
+      self.leftPlayerCharacter:setDrawable(p1.spriteSheet)
+      self.leftPlayerCharacter:setAnimatable(p1.animations.idle)
+   else
+      self.leftPlayerCharacter.isHidden = true
+   end
+
+   if p2.character then
+      self.rightPlayerCharacter.isHidden = false
+      self.rightPlayerCharacter:setDrawable(p2.spriteSheet)
+      self.rightPlayerCharacter:setAnimatable(p2.animations.idle)
+   else
+      self.rightPlayerCharacter.isHidden = true
+   end
 end
 
 ---@private

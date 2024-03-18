@@ -1,4 +1,5 @@
 local UI = require("src.ui.view.base_ui")
+local colors = require("src.ui.view.colors")
 
 
 ---@class Image : UI
@@ -20,6 +21,7 @@ function Image:new(frame, className)
 
    local this = UI:new(frame, Image.className)
 
+   this.isInteractionsEnables = false
    this._drawable = nil
    this._animatable = nil
 
@@ -44,6 +46,10 @@ end
 
 -- Life cycle
 
+function Image:load()
+   self.backgroundColor = colors.CLEAR
+end
+
 function Image:draw()
    UI.draw(self)
 
@@ -51,7 +57,8 @@ function Image:draw()
 
    love.graphics.push()
 
-   love.graphics.setColor({1, 1, 1})
+   -- TODO: Is it right???
+   love.graphics.setColor(colors.WHITE)
 
    if self._animatable then
       self._animatable:draw(
@@ -63,9 +70,7 @@ function Image:draw()
       love.graphics.draw(
          self._drawable,
          self.frame.origin.x,
-         self.frame.origin.y,
-         self.frame.size.width,
-         self.frame.size.height
+         self.frame.origin.y
       )
    end
 

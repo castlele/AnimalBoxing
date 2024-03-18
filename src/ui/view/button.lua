@@ -1,6 +1,7 @@
 local UI = require("src.ui.view.base_ui")
 local Label = require("src.ui.view.label")
 local Colors = require("src.ui.view.colors")
+local Image = require("src.ui.view.image")
 
 
 ---@enum ControlState
@@ -14,6 +15,7 @@ ControlState = {
 ---@class Appearance
 ---@field backgroundColor table
 ---@field textColor table
+---@field image love.Image?
 
 
 ---@class Button: UI
@@ -24,6 +26,7 @@ ControlState = {
 ---@field stateAppearance table<ControlState, Appearance>
 ---@field state ControlState
 ---@field _label Label
+---@field _image Image
 local Button = {
    className = "Button"
 }
@@ -43,6 +46,7 @@ function Button:new(frame, className)
    local appearance = {
       backgroundColor = Colors.CLEAR,
       textColor = Colors.BLACK,
+      image = nil,
    }
    this.stateAppearance = {
       [ControlState.NORMAL] = appearance,
@@ -50,8 +54,8 @@ function Button:new(frame, className)
    this.state = ControlState.NORMAL
    this.text = nil
 
-   local _label = Label:new(frame)
-   this._label = _label
+   this._label = Label:new(frame)
+   this._image = Image:new(frame)
 
    setmetatable(this, self)
 
@@ -87,13 +91,34 @@ end
 function Button:setTextColor(color, state)
    local appearance = self.stateAppearance[state]
 
+   -- TODO: How to remove copy-paste
    if appearance == nil then
       appearance = {
          backgroundColor = Colors.CLEAR,
          textColor = color,
+         image = nil,
       }
    else
       appearance.textColor = color
+   end
+
+   self.stateAppearance[state] = appearance
+end
+
+---@param image love.Image
+---@param state ControlState
+function Button:setImage(image, state)
+   local appearance = self.stateAppearance[state]
+
+   -- TODO: How to remove copy-paste
+   if appearance == nil then
+      appearance = {
+         backgroundColor = Colors.CLEAR,
+         textColor = Colors.BLACK,
+         image = image
+      }
+   else
+      appearance.image = image
    end
 
    self.stateAppearance[state] = appearance
@@ -104,10 +129,12 @@ end
 function Button:setBackgroundColor(color, state)
    local appearance = self.stateAppearance[state]
 
+   -- TODO: How to remove copy-paste
    if appearance == nil then
       appearance = {
          backgroundColor = color,
          textColor = Colors.BLACK,
+         image = nil,
       }
    else
       appearance.backgroundColor = color
@@ -119,6 +146,7 @@ end
 -- Life cycle
 
 function Button:load()
+   self:addSubview(self._image)
    self:addSubview(self._label)
 
    UI.load(self)
@@ -170,6 +198,7 @@ function Button:applyAppearance()
 
    self.backgroundColor = appearance.backgroundColor
    self._label.textColor = appearance.textColor
+   self._image:setDrawable(appearance.image)
 end
 
 

@@ -10,6 +10,7 @@ local PlayerSelection = require("src.game.views.player_selection")
 ---| "start"
 ---| "quit"
 ---@field startButton Button
+---@field settingsButton Button
 ---@field quitButton Button
 local mainMenu = {
    className = "MainMenu",
@@ -43,6 +44,7 @@ function mainMenu:new(frame)
    local bw, bh = 100, 50
    local spacing = 40
 
+   -- TODO: Move views configuration to MainMenu:load
    local startButton = Button:new(
       Frame:new(
          Vector2D:new(w / 2 - bw / 2, h / 2 - bh / 2),
@@ -55,9 +57,21 @@ function mainMenu:new(frame)
 
    menu.startButton = startButton
 
-   local quitButton = Button:new(
+   local settingsButton = Button:new(
       Frame:new(
          Vector2D:new(w / 2 - bw / 2, h / 2 - bh / 2 + spacing + bh),
+         Size:new(bw, bh)
+      )
+   )
+
+   settingsButton:setImage(love.graphics.newImage("res/ui/toggle_button_on.png"), ControlState.NORMAL)
+   settingsButton:setImage(love.graphics.newImage("res/ui/toggle_button_off.png"), ControlState.HIGHLIGHTED)
+
+   menu.settingsButton = settingsButton
+
+   local quitButton = Button:new(
+      Frame:new(
+         Vector2D:new(w / 2 - bw / 2, h / 2 - bh / 2 + (spacing + bh) * 2),
          Size:new(bw, bh)
       )
    )
@@ -97,6 +111,7 @@ function mainMenu:load()
    self.quitButton:addListener(gamepadTapListener)
 
    self:addSubview(self.startButton)
+   self:addSubview(self.settingsButton)
    self:addSubview(self.quitButton)
 
    UI.load(self)

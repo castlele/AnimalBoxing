@@ -10,7 +10,7 @@ local label = {
 }
 setmetatable(label, { __index = UI })
 
----@param frame Frame
+---@param frame? Frame
 ---@param className? string
 function label:new(frame, className)
    if className ~= nil then
@@ -38,9 +38,12 @@ function label:draw()
 
    if self.text == nil then return end
 
-   love.graphics.setColor(self.textColor)
    -- TODO: make font configuration
-   -- love.graphics.setFont()
+   local font = love.graphics.newFont("res/fonts/base.ttf", 16)
+
+   love.graphics.setColor(self.textColor)
+
+   love.graphics.setFont(font)
    love.graphics.printf(
       self.text,
       self.frame.origin.x,

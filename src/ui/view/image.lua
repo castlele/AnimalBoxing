@@ -3,6 +3,7 @@ local colors = require("src.ui.view.colors")
 
 
 ---@class Image : UI
+---@field scale Vector2D
 ---@field _drawable love.Drawable?
 ---@field _animatable Animation
 local Image = {
@@ -12,9 +13,10 @@ setmetatable(Image, { __index = UI })
 
 -- Init
 
----@param frame Frame
+---@param frame? Frame
+---@param scale? Vector2D
 ---@param className? string
-function Image:new(frame, className)
+function Image:new(frame, scale, className)
    if className then
       Image.className = className
    end
@@ -22,6 +24,7 @@ function Image:new(frame, className)
    local this = UI:new(frame, Image.className)
 
    this.isInteractionsEnables = false
+   this.scale = scale or Vector2D:new(1, 1)
    this._drawable = nil
    this._animatable = nil
 
@@ -33,6 +36,11 @@ function Image:new(frame, className)
 end
 
 -- Public methods
+
+---@param scale Vector2D
+function Image:setScale(scale)
+   self.scale = scale
+end
 
 ---@param drawable love.Drawable
 function Image:setDrawable(drawable)
@@ -70,7 +78,10 @@ function Image:draw()
       love.graphics.draw(
          self._drawable,
          self.frame.origin.x,
-         self.frame.origin.y
+         self.frame.origin.y,
+         nil,
+         self.scale.x,
+         self.scale.y
       )
    end
 

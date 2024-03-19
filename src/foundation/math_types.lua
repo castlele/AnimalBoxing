@@ -23,6 +23,11 @@ function Size:new(width, height)
    return size
 end
 
+---@return Size
+function Size:copy()
+   return Size:new(self.width, self.height)
+end
+
 
 ---@class Vector2D
 ---@field x number
@@ -47,6 +52,11 @@ function Vector2D:new(x, y)
    end
 
    return vec
+end
+
+---@return Vector2D
+function Vector2D:copy()
+   return Vector2D:new(self.x, self.y)
 end
 
 ---@param v1 Vector2D
@@ -105,6 +115,11 @@ function Frame:isPointInside(point)
    local isInsideHeight = minY <= point.y and maxY >= point.y
 
    return isInsideWidth and isInsideHeight
+end
+
+---@return Frame
+function Frame:copy()
+   return Frame:new(self.origin:copy(), self.size:copy())
 end
 
 ---@return Frame

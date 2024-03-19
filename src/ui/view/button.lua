@@ -16,6 +16,7 @@ ControlState = {
 ---@field backgroundColor table
 ---@field textColor table
 ---@field image love.Image?
+---@field imageScale? Vector2D?
 
 
 ---@class Button: UI
@@ -34,7 +35,7 @@ setmetatable(Button, { __index = UI })
 
 -- Init
 
----@param frame Frame
+---@param frame? Frame
 ---@param className? string
 function Button:new(frame, className)
    if className ~= nil then
@@ -106,8 +107,9 @@ function Button:setTextColor(color, state)
 end
 
 ---@param image love.Image
+---@param scale Vector2D?
 ---@param state ControlState
-function Button:setImage(image, state)
+function Button:setImage(image, scale, state)
    local appearance = self.stateAppearance[state]
 
    -- TODO: How to remove copy-paste
@@ -115,10 +117,12 @@ function Button:setImage(image, state)
       appearance = {
          backgroundColor = Colors.CLEAR,
          textColor = Colors.BLACK,
-         image = image
+         image = image,
+         imageScale = scale,
       }
    else
       appearance.image = image
+      appearance.imageScale = scale
    end
 
    self.stateAppearance[state] = appearance
@@ -141,6 +145,21 @@ function Button:setBackgroundColor(color, state)
    end
 
    self.stateAppearance[state] = appearance
+end
+
+function Button:applyFrameToSubviews()
+   self._image.frame = self.frame:copy()
+   self._label.frame = self.frame:copy()
+end
+
+---@param padding string
+---| "top"
+---@param value number
+function Button:setLabelPadding(padding, value)
+   if padding == "top" then
+      local currentY = self._label.frame.origin.y
+      self._label.frame.origin.y = currentY + value
+   end
 end
 
 -- Life cycle
@@ -199,6 +218,10 @@ function Button:applyAppearance()
    self.backgroundColor = appearance.backgroundColor
    self._label.textColor = appearance.textColor
    self._image:setDrawable(appearance.image)
+
+   if appearance.imageScale then
+      self._image:setScale(appearance.imageScale)
+   end
 end
 
 

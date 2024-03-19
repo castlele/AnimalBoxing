@@ -1,5 +1,6 @@
 local UI = require("src.ui.view.base_ui")
 local Button = require("src.ui.view.button")
+local colors = require("src.ui.view.colors")
 local PlayerSelection = require("src.game.views.player_selection")
 
 
@@ -12,7 +13,7 @@ local PlayerSelection = require("src.game.views.player_selection")
 ---@field startButton Button
 ---@field settingsButton Button
 ---@field quitButton Button
-local mainMenu = {
+local mainMenu = { -- TODO: Make raneme to MainMenu
    className = "MainMenu",
 }
 setmetatable(mainMenu, { __index = UI })
@@ -38,48 +39,10 @@ function mainMenu:new(frame)
    local menu = UI:new(frame, mainMenu.className)
    menu.backgroundColor = UI.colors.background
    menu.focusedButton = "none"
+   menu.startButton = Button:new()
+   menu.settingsButton = Button:new()
+   menu.quitButton = Button:new()
    menu._focuseDelay = 0
-
-   local w, h = love.window.getMode()
-   local bw, bh = 100, 50
-   local spacing = 40
-
-   -- TODO: Move views configuration to MainMenu:load
-   local startButton = Button:new(
-      Frame:new(
-         Vector2D:new(w / 2 - bw / 2, h / 2 - bh / 2),
-         Size:new(bw, bh)
-      )
-   )
-   startButton.text = "Start the game"
-   startButton:setBackgroundColor(UI.colors.button.background, ControlState.NORMAL)
-   startButton.align = "center"
-
-   menu.startButton = startButton
-
-   local settingsButton = Button:new(
-      Frame:new(
-         Vector2D:new(w / 2 - bw / 2, h / 2 - bh / 2 + spacing + bh),
-         Size:new(bw, bh)
-      )
-   )
-
-   settingsButton:setImage(love.graphics.newImage("res/ui/toggle_button_on.png"), ControlState.NORMAL)
-   settingsButton:setImage(love.graphics.newImage("res/ui/toggle_button_off.png"), ControlState.HIGHLIGHTED)
-
-   menu.settingsButton = settingsButton
-
-   local quitButton = Button:new(
-      Frame:new(
-         Vector2D:new(w / 2 - bw / 2, h / 2 - bh / 2 + (spacing + bh) * 2),
-         Size:new(bw, bh)
-      )
-   )
-   quitButton.text = "Quit"
-   quitButton:setBackgroundColor(UI.colors.button.background, ControlState.NORMAL)
-   quitButton.align = "center"
-
-   menu.quitButton = quitButton
 
    setmetatable(menu, self)
 
@@ -104,6 +67,9 @@ function mainMenu:load()
       end
    end
 
+   self:configureLayout()
+   self:configureAppearance()
+
    self.startButton:addTapGestureRecognizer(function (_) self.startGame(self) end)
    self.startButton:addListener(gamepadTapListener)
 
@@ -126,6 +92,7 @@ function mainMenu:update(dt)
 
       local y = Game.mainJoystick:getGamepadAxis("lefty")
 
+      -- TODO: Remove magic numbers
       if love.timer.getTime() - self._focuseDelay > 0.2 or self._focuseDelay == 0 then
          if y > 0.3 then
             self:nextButton()
@@ -147,12 +114,88 @@ function mainMenu:update(dt)
       end
    end
 
-   self:focusButton()
+   -- self:focusButton()
 
    UI.update(self, dt)
 end
 
 -- Private methods
+
+-- TODO: Good point to create StackView to space buttons evenly?
+---@private
+function mainMenu:configureLayout()
+   local w, h = love.window.getMode()
+   local bw, bh = 200, 80
+   local spacing = 20
+   local bSize = Size:new(bw, bh)
+   -- TODO: Make font size configurable
+   local fontSize = 16
+   local topLabelPadding = bh / 2 - fontSize
+
+   -- Start button
+   self.startButton.frame.origin = Vector2D:new(
+      w / 2 - bw / 2, -- Center of the screen
+      h / 2 - bh / 2
+   )
+   self.startButton.frame.size = bSize
+   self.startButton:applyFrameToSubviews()
+   self.startButton:setLabelPadding("top", topLabelPadding)
+
+   local sf = self.startButton.frame
+
+   -- Settings button
+   self.settingsButton.frame.origin = Vector2D:new(
+      sf.origin.x,
+      sf.origin.y + spacing + bh
+   )
+   self.settingsButton.frame.size = bSize
+   self.settingsButton:applyFrameToSubviews()
+   self.settingsButton:setLabelPadding("top", topLabelPadding)
+
+   -- Quit button
+   self.quitButton.frame.origin = Vector2D:new(
+      sf.origin.x,
+      sf.origin.y + (spacing + bh) * 2
+   )
+   self.quitButton.frame.size = bSize
+   self.quitButton:applyFrameToSubviews()
+   self.quitButton:setLabelPadding("top", topLabelPadding)
+end
+
+---@private
+function mainMenu:configureAppearance()
+   local bSize = self.startButton.frame.size
+   local bw, bh = bSize.width, bSize.height
+   -- TODO: Needed to creaate something like resources object to store imgs and other staff
+   local buttonImgNormal = love.graphics.newImage("res/ui/button_yellow_normal.png")
+   local buttonImgHighlighted = love.graphics.newImage("res/ui/button_yellow_highlighted.png")
+   local imgW, imgH = buttonImgNormal:getWidth(), buttonImgNormal:getHeight()
+   local scale = Vector2D:new(bw / imgW, bh / imgH)
+   -- TODO: Localize
+   local buttons = {
+      ["Start the game"] = self.startButton,
+      ["Quit"] = self.quitButton,
+      ["Settings"] = self.settingsButton,
+   }
+
+   for label, button in pairs(buttons) do
+      button:setTextColor(colors.WHITE, ControlState.NORMAL)
+      button:setTextColor(colors.WHITE, ControlState.HIGHLIGHTED)
+      button.text = label
+      button.align = "center"
+
+      button:setImage(
+         buttonImgNormal,
+         scale,
+         ControlState.NORMAL
+      )
+      button:setImage(
+         buttonImgHighlighted,
+         scale,
+         ControlState.HIGHLIGHTED
+      )
+   end
+end
 
 ---@private
 function mainMenu:nextButton()
@@ -172,6 +215,7 @@ function mainMenu:previousButton()
    end
 end
 
+---@private
 function mainMenu:focusButton()
    if self.focusedButton == "start" then
       self.startButton.isFocused = true

@@ -23,6 +23,12 @@ function Size:new(width, height)
    return size
 end
 
+---@param other Size
+---@return boolean
+function Size:equals(other)
+   return self.width == other.width and self.height == other.height
+end
+
 ---@return Size
 function Size:copy()
    return Size:new(self.width, self.height)
@@ -52,6 +58,12 @@ function Vector2D:new(x, y)
    end
 
    return vec
+end
+
+---@param other Vector2D
+---@return boolean
+function Vector2D:equals(other)
+   return self.x == other.x and self.y == other.y
 end
 
 ---@return Vector2D

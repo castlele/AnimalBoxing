@@ -1,4 +1,5 @@
 local UI = require("src.ui.view.base_ui")
+local Stack = require("src.ui.view.stack")
 local Button = require("src.ui.view.button")
 local colors = require("src.ui.view.colors")
 local PlayerSelection = require("src.game.views.player_selection")
@@ -10,6 +11,7 @@ local PlayerSelection = require("src.game.views.player_selection")
 ---| "none"
 ---| "start"
 ---| "quit"
+---@field buttonsStack Stack
 ---@field startButton Button
 ---@field settingsButton Button
 ---@field quitButton Button
@@ -39,6 +41,7 @@ function mainMenu:new(frame)
    local menu = UI:new(frame, mainMenu.className)
    menu.backgroundColor = UI.colors.background
    menu.focusedButton = "none"
+   menu.buttonsStack = Stack:new()
    menu.startButton = Button:new()
    menu.settingsButton = Button:new()
    menu.quitButton = Button:new()
@@ -68,7 +71,7 @@ function mainMenu:load()
    end
 
    self:configureLayout()
-   self:configureAppearance()
+   -- self:configureAppearance()
 
    self.startButton:addTapGestureRecognizer(function (_) self.startGame(self) end)
    self.startButton:addListener(gamepadTapListener)
@@ -76,9 +79,10 @@ function mainMenu:load()
    self.quitButton:addTapGestureRecognizer(function (_) self.quit(self) end)
    self.quitButton:addListener(gamepadTapListener)
 
-   self:addSubview(self.startButton)
-   self:addSubview(self.settingsButton)
-   self:addSubview(self.quitButton)
+   self:addSubview(self.buttonsStack)
+   self.buttonsStack:addArrangedSubview(self.startButton)
+   self.buttonsStack:addArrangedSubview(self.settingsButton)
+   self.buttonsStack:addArrangedSubview(self.quitButton)
 
    UI.load(self)
 end
@@ -124,6 +128,9 @@ end
 -- TODO: Good point to create StackView to space buttons evenly?
 ---@private
 function mainMenu:configureLayout()
+   self:configureStackLayout()
+
+   -- TODO: make helper methods for interactings with common love2d methods??
    local w, h = love.window.getMode()
    local bw, bh = 200, 80
    local spacing = 20
@@ -133,33 +140,45 @@ function mainMenu:configureLayout()
    local topLabelPadding = bh / 2 - fontSize
 
    -- Start button
-   self.startButton.frame.origin = Vector2D:new(
+   -- self.startButton.frame.origin = Vector2D:new(
+   --    w / 2 - bw / 2, -- Center of the screen
+   --    h / 2 - bh / 2
+   -- )
+   self.startButton.frame.size = bSize
+   -- self.startButton:setLabelPadding("top", topLabelPadding)
+
+   -- local sf = self.startButton.frame
+
+   -- Settings button
+   -- self.settingsButton.frame.origin = Vector2D:new(
+   --    sf.origin.x,
+   --    sf.origin.y + spacing + bh
+   -- )
+   self.settingsButton.frame.size = bSize
+   -- self.settingsButton:setLabelPadding("top", topLabelPadding)
+
+   -- Quit button
+   -- self.quitButton.frame.origin = Vector2D:new(
+   --    sf.origin.x,
+   --    sf.origin.y + (spacing + bh) * 2
+   -- )
+   self.quitButton.frame.size = bSize
+   -- self.quitButton:setLabelPadding("top", topLabelPadding)
+end
+
+---@private
+function mainMenu:configureStackLayout()
+   -- TODO: Constants???
+   local w, h = love.window.getMode()
+   local bw, bh = 200, 80
+   local spacing = 20
+   local buttonsAmount = 3
+
+   self.buttonsStack.spacing = spacing
+   self.buttonsStack.frame.origin = Vector2D:new(
       w / 2 - bw / 2, -- Center of the screen
       h / 2 - bh / 2
    )
-   self.startButton.frame.size = bSize
-   self.startButton:applyFrameToSubviews()
-   self.startButton:setLabelPadding("top", topLabelPadding)
-
-   local sf = self.startButton.frame
-
-   -- Settings button
-   self.settingsButton.frame.origin = Vector2D:new(
-      sf.origin.x,
-      sf.origin.y + spacing + bh
-   )
-   self.settingsButton.frame.size = bSize
-   self.settingsButton:applyFrameToSubviews()
-   self.settingsButton:setLabelPadding("top", topLabelPadding)
-
-   -- Quit button
-   self.quitButton.frame.origin = Vector2D:new(
-      sf.origin.x,
-      sf.origin.y + (spacing + bh) * 2
-   )
-   self.quitButton.frame.size = bSize
-   self.quitButton:applyFrameToSubviews()
-   self.quitButton:setLabelPadding("top", topLabelPadding)
 end
 
 ---@private

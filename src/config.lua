@@ -8,4 +8,5 @@ local config = {
    isDebug = true,
 }
 
+
 return config

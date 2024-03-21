@@ -30,6 +30,7 @@ function Draw()
       local fps = love.timer.getFPS()
 
       love.graphics.push()
+      love.graphics.setColor({0, 0, 0})
       love.graphics.print("FPS: " .. tostring(fps))
       love.graphics.pop()
    end

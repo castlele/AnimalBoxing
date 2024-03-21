@@ -173,10 +173,12 @@ end
 
 ---@param dt number
 function Button:update(dt)
-   UI.update(self, dt)
-
+   ---FIX: This is actually a bug, should be updated with something like autolayout system
+   self:applyFrameToSubviews()
    self:updateState()
    self:applyAppearance()
+
+   UI.update(self, dt)
 end
 
 function Button:draw()

@@ -3,6 +3,7 @@ local Button = require("src.ui.view.button")
 local Image = require("src.ui.view.image")
 local Grid = require("src.game.views.grid")
 local PlayersCard = require("src.game.views.players_card")
+local ButtonState = require("src.ui.view.button_state")
 local SceneSelection = require("src.game.views.scene_selection")
 local characters = require("src.entities.characters")
 local colors = require("src.ui.view.colors")
@@ -41,7 +42,7 @@ PlayerSelection._createCell = function (self, cellFrame, column, row, columns, _
    end
 
    local playersCard = PlayersCard:new(cellFrame, character)
-   playersCard:setBackgroundColor(colors.RED, ControlState.NORMAL)
+   playersCard:setBackgroundColor(colors.RED, ButtonState.NORMAL)
 
    return playersCard
 end
@@ -133,7 +134,7 @@ function PlayerSelection:configureBackButton()
    ---@type Button
    local backButton = Button:new(backButtonFrame)
 
-   backButton:setBackgroundColor(colors.RED, ControlState.NORMAL)
+   backButton:setBackgroundColor(colors.RED, ButtonState.NORMAL)
    backButton:addTapGestureRecognizer(function (_) self:dismiss() end)
 
    self.backButton = backButton
@@ -154,7 +155,7 @@ function PlayerSelection:configureContinueButton()
    ---@type Button
    local continueButton = Button:new(continueButtonFrame)
 
-   continueButton:setBackgroundColor(colors.RED, ControlState.NORMAL)
+   continueButton:setBackgroundColor(colors.RED, ButtonState.NORMAL)
    continueButton:addTapGestureRecognizer(function (_)
       self:present(SceneSelection:new(self.frame))
    end)

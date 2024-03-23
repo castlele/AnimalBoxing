@@ -1,9 +1,11 @@
 local LifeCycle = require("src.ui.interface.life_cycle")
+local Texture = require("src.ui.view.texture")
 local Logger = require("src.foundation.logger")
 local colors = require("src.ui.view.colors")
 
 
 ---@class UI: LifeCycle
+---@field texture Texture
 ---@field isHidden boolean
 ---@field subviews table<UI>
 ---@field frame Frame
@@ -41,6 +43,7 @@ function UI:new(frame, className)
 
    local uiElement = {
       frame = frame or Frame.frameZero(),
+      texture = Texture:new(),
       isHidden = false,
       subviews = {},
       backgroundColor = {1, 1, 1},
@@ -87,6 +90,11 @@ end
 ---@param subview UI
 function UI:addSubview(subview)
    table.insert(self.subviews, subview)
+end
+
+---@param texture Texture
+function UI:updateTexture(texture)
+   self.texture = texture
 end
 
 -- Events handling
@@ -201,6 +209,8 @@ function UI:draw()
 
       love.graphics.pop()
 
+      self:drawTexture()
+
       self:iterateSubviews(function (subview)
          subview:draw()
       end)
@@ -218,6 +228,26 @@ function UI:iterateSubviews(callback)
 end
 
 ---@private
+function UI:drawTexture()
+   love.graphics.push()
+
+   love.graphics.setColor(colors.WHITE)
+
+   if self.texture.image then
+      love.graphics.draw(
+         self.texture.image,
+         self.frame.origin.x,
+         self.frame.origin.y,
+         nil,
+         self.texture.scale.x,
+         self.texture.scale.y
+      )
+   end
+
+   love.graphics.pop()
+end
+
+---@private
 function UI:drawDebugInfoIfNeeded()
    local alpha = self.borderColor[4] or 1
 
@@ -225,20 +255,24 @@ function UI:drawDebugInfoIfNeeded()
 
    love.graphics.setColor(colors.BLACK)
 
-   love.graphics.printf(
-      self.className,
-      self.frame.origin.x,
-      self.frame.origin.y,
-      self.frame.size.width
-   )
+   if Config.debug.isClassName then
+      love.graphics.printf(
+         self.className,
+         self.frame.origin.x,
+         self.frame.origin.y,
+         self.frame.size.width
+      )
+   end
 
-   love.graphics.rectangle(
-      "line",
-      self.frame.origin.x,
-      self.frame.origin.y,
-      self.frame.size.width,
-      self.frame.size.height
-   )
+   if Config.debug.isBorder then
+      love.graphics.rectangle(
+         "line",
+         self.frame.origin.x,
+         self.frame.origin.y,
+         self.frame.size.width,
+         self.frame.size.height
+      )
+   end
 end
 
 

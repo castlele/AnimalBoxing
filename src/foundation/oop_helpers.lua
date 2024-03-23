@@ -1,5 +1,5 @@
 ---@class LuaClass
-LuaClass = {
+local LuaClass = {
    className = "LuaClass",
 }
 LuaClass.__index = LuaClass
@@ -26,3 +26,6 @@ function IsInstance(obj, class)
 
    return name == class.className
 end
+
+
+return LuaClass

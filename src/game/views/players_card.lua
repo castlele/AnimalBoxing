@@ -1,4 +1,5 @@
 local Button = require("src.ui.view.button")
+local ButtonState = require("src.ui.view.button_state")
 local colors = require("src.ui.view.colors")
 
 
@@ -29,10 +30,10 @@ end
 
 function PlayersCard:load()
    if not self.character then
-      self:setBackgroundColor(colors.BLACK, ControlState.NORMAL)
+      self:setBackgroundColor(colors.BLACK, ButtonState.NORMAL)
    end
 
-   self:setBackgroundColor(colors.WHITE, ControlState.HOVERED)
+   self:setBackgroundColor(colors.WHITE, ButtonState.HOVERED)
 
    Button.load(self)
 end

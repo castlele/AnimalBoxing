@@ -1,4 +1,3 @@
-
 -- Local functions
 
 ---@return MouseEvent

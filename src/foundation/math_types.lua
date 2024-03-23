@@ -23,6 +23,11 @@ function Size:new(width, height)
    return size
 end
 
+---@return boolean
+function Size:isZero()
+   return self.width == 0 and self.height == 0
+end
+
 ---@param other Size
 ---@return boolean
 function Size:equals(other)
@@ -114,9 +119,9 @@ function Frame:new(origin, size)
    return frame
 end
 
+-- TODO: No translation here
 ---@param point Vector2D
 ---@return boolean
----@deprecated Wrong behavior here. What if there is a rotation on the frame
 function Frame:isPointInside(point)
    local minX = self.origin.x
    local maxX = self.origin.x + self.size.width

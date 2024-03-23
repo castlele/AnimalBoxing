@@ -3,10 +3,17 @@
 ---@field y number
 ---@class Config
 ---@field gravity Gravity
-local config = {
+---@field isDebug boolean
+---@field debug table
+local Config = {
    gravity = { x=0, y=500 },
    isDebug = true,
+   debug = {
+      isFps = true,
+      isClassName = false,
+      isBorder = true,
+   }
 }
 
 
-return config
+return Config

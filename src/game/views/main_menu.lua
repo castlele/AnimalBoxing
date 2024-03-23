@@ -1,8 +1,10 @@
 local UI = require("src.ui.view.base_ui")
 local Stack = require("src.ui.view.stack")
 local Button = require("src.ui.view.button")
-local colors = require("src.ui.view.colors")
+local ButtonState = require("src.ui.view.button_state")
+local Texture = require("src.ui.view.texture")
 local PlayerSelection = require("src.game.views.player_selection")
+local colors = require("src.ui.view.colors")
 
 
 ---@class MainMenu: UI
@@ -71,7 +73,7 @@ function mainMenu:load()
    end
 
    self:configureLayout()
-   -- self:configureAppearance()
+   self:configureAppearance()
 
    self.startButton:addTapGestureRecognizer(function (_) self.startGame(self) end)
    self.startButton:addListener(gamepadTapListener)
@@ -130,40 +132,12 @@ end
 function mainMenu:configureLayout()
    self:configureStackLayout()
 
-   -- TODO: make helper methods for interactings with common love2d methods??
-   local w, h = love.window.getMode()
    local bw, bh = 200, 80
-   local spacing = 20
    local bSize = Size:new(bw, bh)
-   -- TODO: Make font size configurable
-   local fontSize = 16
-   local topLabelPadding = bh / 2 - fontSize
 
-   -- Start button
-   -- self.startButton.frame.origin = Vector2D:new(
-   --    w / 2 - bw / 2, -- Center of the screen
-   --    h / 2 - bh / 2
-   -- )
    self.startButton.frame.size = bSize
-   -- self.startButton:setLabelPadding("top", topLabelPadding)
-
-   -- local sf = self.startButton.frame
-
-   -- Settings button
-   -- self.settingsButton.frame.origin = Vector2D:new(
-   --    sf.origin.x,
-   --    sf.origin.y + spacing + bh
-   -- )
    self.settingsButton.frame.size = bSize
-   -- self.settingsButton:setLabelPadding("top", topLabelPadding)
-
-   -- Quit button
-   -- self.quitButton.frame.origin = Vector2D:new(
-   --    sf.origin.x,
-   --    sf.origin.y + (spacing + bh) * 2
-   -- )
    self.quitButton.frame.size = bSize
-   -- self.quitButton:setLabelPadding("top", topLabelPadding)
 end
 
 ---@private
@@ -183,6 +157,8 @@ end
 
 ---@private
 function mainMenu:configureAppearance()
+   self.buttonsStack.backgroundColor = colors.CLEAR
+
    local bSize = self.startButton.frame.size
    local bw, bh = bSize.width, bSize.height
    -- TODO: Needed to creaate something like resources object to store imgs and other staff
@@ -198,20 +174,18 @@ function mainMenu:configureAppearance()
    }
 
    for label, button in pairs(buttons) do
-      button:setTextColor(colors.WHITE, ControlState.NORMAL)
-      button:setTextColor(colors.WHITE, ControlState.HIGHLIGHTED)
+      button:setTextColor(colors.WHITE, ButtonState.NORMAL)
+      button:setTextColor(colors.WHITE, ButtonState.HIGHLIGHTED)
       button.text = label
       button.align = "center"
 
-      button:setImage(
-         buttonImgNormal,
-         scale,
-         ControlState.NORMAL
+      button:setTexture(
+         Texture:new(buttonImgNormal, scale),
+         ButtonState.NORMAL
       )
-      button:setImage(
-         buttonImgHighlighted,
-         scale,
-         ControlState.HIGHLIGHTED
+      button:setTexture(
+         Texture:new(buttonImgHighlighted, scale),
+         ButtonState.HIGHLIGHTED
       )
    end
 end

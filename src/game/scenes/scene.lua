@@ -1,24 +1,34 @@
-require("src.utils.math_types")
+local LifeCycle = require("src.ui.interface.life_cycle")
 
----@class Scene
----@field backgroundImage love.Image
----@field playerSpawnPos table<integer, Vector2D>
----@field frame SceneFrame
----@field floor Frame
-Scene = {}
 
 ---@class SceneFrame
 ---@field minX number
 ---@field maxX number
 
+
+---@class Scene : LifeCycle
+---@field name string
+---@field backgroundImage love.Image
+---@field playerSpawnPos table<integer, Vector2D>
+---@field frame SceneFrame
+---@field floor Frame
+Scene = {
+   className = "Scene",
+}
+setmetatable(Scene, { __index = LifeCycle })
+
+-- Init
+
+---@param name string
 ---@param image love.Image
 ---@param playerSpawnPos table<integer, Vector2D>
 ---@param frame SceneFrame
 ---@param floor Frame
 ---@return Scene
-function Scene:new(image, playerSpawnPos, frame, floor)
+function Scene:new(name, image, playerSpawnPos, frame, floor)
    ---@type Scene
    local scene = {
+      name = name,
       backgroundImage = image,
       playerSpawnPos = playerSpawnPos,
       frame = frame,
@@ -31,6 +41,8 @@ function Scene:new(image, playerSpawnPos, frame, floor)
 
    return scene
 end
+
+-- Public methods
 
 ---@return Scene
 function Scene:createDebug()
@@ -47,19 +59,19 @@ function Scene:createDebug()
       minX = 0,
       maxX = love.graphics.getWidth(),
    }
-   ---@type Frame
-   local floor = {
-      origin = {
-         x = 0,
-         y = love.graphics.getHeight(),
-      },
-      size = {
-         width = love.graphics.getWidth(),
-         height = 10,
-      }
-   }
+   local floor = Frame:new(
+      Vector2D:new(
+         0,
+         love.graphics.getHeight()
+      ),
+      Size:new(
+         love.graphics.getWidth(),
+         10
+      )
+   )
 
    return Scene:new(
+      "debug",
       love.graphics.newImage("res/sprites/debug_background.png"),
       playerPos,
       frame,
@@ -72,6 +84,8 @@ end
 function Scene:getPlayerPos(index)
    return self.playerSpawnPos[index]
 end
+
+-- Life cycle
 
 function Scene:load()
    self:createFrame()
@@ -137,3 +151,6 @@ function Scene:createFloor()
 
    self.floorCollider:setType("static")
 end
+
+
+return Scene

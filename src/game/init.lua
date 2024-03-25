@@ -1,7 +1,7 @@
 local UI = require("src.ui.view.base_ui")
 local MainMenu = require("src.game.views.main_menu")
 local Players = require("src.entities")
-local Scenes = require("src.scenes")
+local Scenes = require("src.game.scenes")
 
 
 ---@class Game: UI
@@ -27,7 +27,7 @@ function Game:processMouseEvent(event)
 
    local view = self.rootUIObject:hitTest(event)
 
-   if view ~= nil then
+   if view then
       view:processMouseEvent(event)
    end
 end

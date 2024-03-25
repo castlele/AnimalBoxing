@@ -12,6 +12,7 @@ local Characters = {
    collection = {},
 }
 
+
 ---@class Character
 ---@field name string
 ---@field spriteSheet love.Image

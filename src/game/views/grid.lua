@@ -1,7 +1,7 @@
 local UI = require("src.ui.view.base_ui")
 
+-- TODO: Move to src.ui.view.grid
 
--- TODO: rename to "Grid"
 ---@class Grid: UI
 ---@field rows integer
 ---@field columns integer
@@ -17,14 +17,14 @@ setmetatable(Grid, { __index = UI })
 
 -- Init
 
----@param pos Vector2D
+---@param pos Vector2D?
 ---@param cellSize Size
 ---@param rows integer
 ---@param columns integer
 ---@param spacing number
 function Grid:new(pos, cellSize, rows, columns, spacing)
    local frame = Frame:new(
-      pos,
+      pos or Vector2D:new(0, 0),
       Size:new(
          (spacing - 1 + cellSize.width) * columns,
          (spacing - 1 + cellSize.height) * rows

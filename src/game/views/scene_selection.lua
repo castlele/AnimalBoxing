@@ -1,10 +1,11 @@
-local UI = require("src.ui.view.base_ui")
-local Image = require("src.ui.view.image")
+local Alert = require("src.ui.view.alert")
 local Button = require("src.ui.view.button")
 local ButtonState = require("src.ui.view.button_state")
 local Colors = require("src.ui.view.colors")
-local Texture = require("src.ui.view.texture")
 local Grid = require("src.game.views.grid")
+local Image = require("src.ui.view.image")
+local Texture = require("src.ui.view.texture")
+local UI = require("src.ui.view.base_ui")
 
 
 local cellSize = Size:new(100, 60)
@@ -150,6 +151,9 @@ end
 ---@private
 function SceneSelection:bind()
    self.backButton:addTapGestureRecognizer(function (_) self:dismiss() end)
+   self.startGameButton:addTapGestureRecognizer(function ()
+      self:presentStartGameConfigurmationDialog()
+   end)
 end
 
 ---@private
@@ -203,6 +207,13 @@ function SceneSelection:configurePlayersPreview()
 
    self.leftPlayerCharacter.frame.origin = leftPlayerOrigin
    self.rightPlayerCharacter.frame.origin = rightPlayerOrigin
+end
+
+---@private
+function SceneSelection:presentStartGameConfigurmationDialog()
+   local alert = Alert:new()
+
+   self:present(alert)
 end
 
 

@@ -140,6 +140,14 @@ function Frame:copy()
 end
 
 ---@return Frame
+function Frame.screenSize()
+   return Frame:new(
+      Vector2D:new(0, 0),
+      Size:new(love.window.getMode())
+   )
+end
+
+---@return Frame
 function Frame.frameZero()
    return Frame:new(
       Vector2D:new(0, 0),

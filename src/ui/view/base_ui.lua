@@ -24,7 +24,7 @@ local UI = {
 --TODO: Temporary solution. as in UIKit every UI should have background color and etc
 ---@deprecated
 UI.colors = {
-   background = { 102/255, 255/255, 255/255, 0.5 },
+   background = { 102/255, 255/255, 255/255, 1 },
    button = {
       background = { 255/255, 242/255, 204/255 },
       font = { 0, 0, 0 },
@@ -70,6 +70,7 @@ end
 function UI:present(view)
    self.presentedUI = view
    self.presentedUI.presentingUI = self
+   self:addSubview(self.presentedUI)
    self.presentedUI:load()
 end
 
@@ -82,7 +83,9 @@ end
 function UI:pop()
    if not self.presentedUI then return end
 
+   self.presentedUI.presentingUI = nil
    self.presentedUI = nil
+   table.remove(self.subviews, #self.subviews)
 end
 
 -- Subviews manipulations
@@ -170,51 +173,43 @@ function UI:update(dt)
       listener(self)
    end
 
-   if self.presentedUI then
-      self.presentedUI:update(dt)
-   else
-      self:iterateSubviews(function (subview)
-         subview:update(dt)
-      end)
-   end
+   self:iterateSubviews(function (subview)
+      subview:update(dt)
+   end)
 end
 
 function UI:draw()
    if self.isHidden then return end
 
-   if self.presentedUI then
-      self.presentedUI:draw()
-   else
-      love.graphics.push()
+   love.graphics.push()
 
-      love.graphics.setColor(self.backgroundColor)
-      love.graphics.rectangle(
-         "fill",
-         self.frame.origin.x,
-         self.frame.origin.y,
-         self.frame.size.width,
-         self.frame.size.height
-      )
+   love.graphics.setColor(self.backgroundColor)
+   love.graphics.rectangle(
+      "fill",
+      self.frame.origin.x,
+      self.frame.origin.y,
+      self.frame.size.width,
+      self.frame.size.height
+   )
 
-      love.graphics.setColor(self.borderColor)
-      love.graphics.rectangle(
-         "line",
-         self.frame.origin.x,
-         self.frame.origin.y,
-         self.frame.size.width,
-         self.frame.size.height
-      )
+   love.graphics.setColor(self.borderColor)
+   love.graphics.rectangle(
+      "line",
+      self.frame.origin.x,
+      self.frame.origin.y,
+      self.frame.size.width,
+      self.frame.size.height
+   )
 
-      self:drawDebugInfoIfNeeded()
+   self:drawDebugInfoIfNeeded()
 
-      love.graphics.pop()
+   love.graphics.pop()
 
-      self:drawTexture()
+   self:drawTexture()
 
-      self:iterateSubviews(function (subview)
-         subview:draw()
-      end)
-   end
+   self:iterateSubviews(function (subview)
+      subview:draw()
+   end)
 end
 
 -- Private

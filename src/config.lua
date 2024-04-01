@@ -9,9 +9,9 @@ local Config = {
    gravity = { x=0, y=500 },
    isDebug = true,
    debug = {
-      isFps = true,
+      isFps = false,
       isClassName = false,
-      isBorder = true,
+      isBorder = false,
    }
 }
 

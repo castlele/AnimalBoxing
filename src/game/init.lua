@@ -1,7 +1,10 @@
-local UI = require("src.ui.view.base_ui")
+local Button = require("src.ui.view.button")
+local ButtonState = require("src.ui.view.button_state")
+local Colors = require("src.ui.view.colors")
 local MainMenu = require("src.game.views.main_menu")
 local Players = require("src.entities")
 local Scenes = require("src.game.scenes")
+local UI = require("src.ui.view.base_ui")
 
 
 -- TODO: Refactor rootUIObject with presentedUI in base UI
@@ -24,13 +27,16 @@ setmetatable(Game, { __index = UI })
 
 ---@param event MouseEvent
 function Game:processMouseEvent(event)
-   if self.rootUIObject == nil then return end
+   if not self.rootUIObject then return end
 
-   local view = self.rootUIObject:hitTest(event)
+   self.rootUIObject:processMouseEvent(event)
+end
 
-   if view then
-      view:processMouseEvent(event)
-   end
+---@param event KeyboardEvent
+function Game:processKeyboardEvent(event)
+   if not self.rootUIObject then return end
+
+   self.rootUIObject:processKeyboardEvent(event)
 end
 
 function Game:startTheGame()
@@ -46,7 +52,7 @@ function Game:load()
    self.scenes = Scenes:new()
 
    if self.rootUIObject == nil then
-      self.rootUIObject = MainMenu:new(self.frame)
+      self:initMainMenu()
    end
 
    self.rootUIObject:load()
@@ -78,6 +84,26 @@ function Game:setupMainControl()
 
    self.mainControl = "joystick"
    self.mainJoystick =  love.joystick.getJoysticks()[1]
+end
+
+---@private
+function Game:initMainMenu()
+   self.rootUIObject = MainMenu:new(self.frame)
+   self:setupDebugMode()
+end
+
+---@private
+function Game:setupDebugMode()
+   if not Config.isDebug then return end
+
+   self.rootUIObject:addKeyboardeventListener(function (view, event)
+      if not view:isPresenting() and event.key == "\\" then
+         self:startTheGame()
+         return true
+      end
+
+      return false
+   end)
 end
 
 

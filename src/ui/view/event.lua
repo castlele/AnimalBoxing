@@ -3,7 +3,7 @@
 ---| '"mouseRightButton"'
 
 
----@class Event: LuaClass
+---@class Event : LuaClass
 Event = {
    className = "Event",
 }
@@ -18,7 +18,7 @@ function Event:new()
 end
 
 
----@class MouseEvent: Event
+---@class MouseEvent : Event
 ---@field point Vector2D
 ---@field type string
 ---| "mousepressed"
@@ -49,3 +49,29 @@ function MouseEvent:new(point, type, eventType, presses)
 
    return event
 end
+
+
+---@class KeyboardEvent : Event
+---@field key string
+KeyboardEvent = {
+   classname = "KeyboardEvent",
+}
+setmetatable(KeyboardEvent, { __index = Event })
+
+---@param key string
+function KeyboardEvent:new(key)
+   local this = Event:new()
+
+   this.key = key
+
+   setmetatable(this, self)
+
+   self.__index = self
+
+   return this
+end
+
+return {
+   MOUSE = MouseEvent,
+   KEYBOARD = KeyboardEvent,
+}

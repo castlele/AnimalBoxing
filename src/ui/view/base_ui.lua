@@ -13,7 +13,7 @@ local colors = require("src.ui.view.colors")
 ---@field borderColor table
 ---@field isInteractionsEnables boolean
 ---@field tapGestureRecognizers table<fun(view: UI)>
----@field listeners table<fun(view: UI)>
+---@field keyboardEventListeners table<fun(view: UI, event: KeyboardEvent): boolean>
 ---@field presentedUI UI?
 ---@field presentingUI UI?
 ---@field _logger Logger
@@ -50,7 +50,7 @@ function UI:new(frame, className)
       borderColor = {1, 1, 1, 0},
       isInteractionsEnables = true,
       tapGestureRecognizers = {},
-      listeners = {},
+      keyboardEventListeners = {},
       presentedUI = nil,
       presentingUI = nil,
    }
@@ -65,6 +65,11 @@ function UI:new(frame, className)
 end
 
 -- Presentation
+
+---@return boolean
+function UI:isPresenting()
+   return self.presentedUI ~= nil
+end
 
 ---@param view UI
 function UI:present(view)
@@ -109,16 +114,42 @@ function UI:addTapGestureRecognizer(callback)
 end
 
 ---@generic T : UI
----@param callback fun(view: T)
-function UI:addListener(callback)
-   table.insert(self.listeners, callback)
+---@param callback fun(view: T, event: KeyboardEvent): boolean
+function UI:addKeyboardeventListener(callback)
+   table.insert(self.keyboardEventListeners, callback)
 end
 
 ---@param event MouseEvent
 function UI:processMouseEvent(event)
-   for _, tapRecognizer in pairs(self.tapGestureRecognizers) do
+   local ui = self:hitTest(event)
+
+   if not ui then return end
+
+   for _, tapRecognizer in pairs(ui.tapGestureRecognizers) do
       tapRecognizer(self)
    end
+end
+
+---@param event KeyboardEvent
+---@return boolean
+function UI:canHandleKeyboardEvent(event)
+   for _, listener in pairs(self.keyboardEventListeners) do
+      if listener(self, event) then
+         return true
+      end
+   end
+
+   return false
+end
+
+---@param event KeyboardEvent
+function UI:processKeyboardEvent(event)
+   if self:canHandleKeyboardEvent(event) then return end
+
+   self:iterateSubviews(function (subview)
+      -- WARN: don't know if this return will break iteration
+      if subview:canHandleKeyboardEvent(event) then return end
+   end)
 end
 
 ---@param event MouseEvent
@@ -169,10 +200,6 @@ end
 
 ---@param dt number
 function UI:update(dt)
-   for _, listener in pairs(self.listeners) do
-      listener(self)
-   end
-
    self:iterateSubviews(function (subview)
       subview:update(dt)
    end)

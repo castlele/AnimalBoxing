@@ -1,3 +1,5 @@
+local Events = require("src.ui.view.event")
+
 -- Local functions
 
 ---@return MouseEvent
@@ -11,7 +13,7 @@ local function packMouseEvent(x, y, button, presses, type)
       sourceType = "mouseRightButton"
    end
 
-   local mouseEvent = MouseEvent:new(
+   local mouseEvent = Events.MOUSE:new(
       Vector2D:new(x, y),
       type,
       sourceType,
@@ -19,6 +21,12 @@ local function packMouseEvent(x, y, button, presses, type)
    )
 
    return mouseEvent
+end
+
+---@param key string
+---@return KeyboardEvent
+local function packKeyboardEvent(key)
+   return Events.KEYBOARD:new(key)
 end
 
 -- love methods
@@ -45,6 +53,12 @@ function love.mousereleased(x, y, button, _, presses)
    local mouseEvent = packMouseEvent(x, y, button, presses, "mousereleased")
 
    SendMouseEvent(mouseEvent)
+end
+
+function love.keypressed(key, _, _)
+   local keyboardEvent = packKeyboardEvent(key)
+
+   SendKeyboardEvent(keyboardEvent)
 end
 
 function love.draw()

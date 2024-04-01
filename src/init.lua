@@ -1,5 +1,4 @@
 require("src.foundation.math_types")
-require("src.ui.view.event")
 
 
 LuaClass = require("src.foundation.oop_helpers")
@@ -20,6 +19,11 @@ end
 ---@param event MouseEvent
 function SendMouseEvent(event)
    Game:processMouseEvent(event)
+end
+
+---@param event KeyboardEvent
+function SendKeyboardEvent(event)
+   Game:processKeyboardEvent(event)
 end
 
 function Draw()

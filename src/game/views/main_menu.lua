@@ -76,10 +76,12 @@ function mainMenu:load()
    self:configureAppearance()
 
    self.startButton:addTapGestureRecognizer(function (_) self.startGame(self) end)
-   self.startButton:addListener(gamepadTapListener)
+   -- TODO: Needed a better way of handling gamepad events
+   -- self.startButton:addListener(gamepadTapListener)
 
    self.quitButton:addTapGestureRecognizer(function (_) self.quit(self) end)
-   self.quitButton:addListener(gamepadTapListener)
+   -- TODO: Needed a better way of handling gamepad events
+   -- self.quitButton:addListener(gamepadTapListener)
 
    self:addSubview(self.buttonsStack)
    self.buttonsStack:addArrangedSubview(self.startButton)

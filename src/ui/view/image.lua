@@ -72,11 +72,11 @@ end
 function Image:draw()
    UI.draw(self)
 
-   if not self._drawable then return end
+   if not self._drawable or self.isHidden then return end
 
    love.graphics.push()
 
-   -- TODO: Is it right???
+   -- WARN: Is it right???
    love.graphics.setColor(colors.WHITE)
 
    if self._animatable then

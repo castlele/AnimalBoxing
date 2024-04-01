@@ -6,19 +6,22 @@ UI = require("src.ui.view.base_ui")
 ---@class Alert : UI
 ---@field dialogView UI
 ---@field dimmedView UI
+---@field tapAction fun()
 local Alert = {
    className = "Alert",
 }
 setmetatable(Alert, { __index = UI })
 
 ---@param className? string
-function Alert:new(className)
+function Alert:new(tapAction, className)
    if className then
       Alert.className = className
    end
 
    ---@type Alert
    local this = UI:new(Frame.screenSize(), className)
+
+   this.tapAction = tapAction
 
    -- TODO: Consider moving to a standard UI component
    this.dialogView = UI:new(nil, "DialogView")
@@ -92,8 +95,7 @@ function Alert:configureDialogLayout()
    )
    confirmationButton.text = "Start the Boxing"
    confirmationButton:addTapGestureRecognizer(function (_)
-      print("STARTING....")
-      love.window.close()
+      self.tapAction()
    end)
 
    self.dialogView:addSubview(closeButton)

@@ -4,6 +4,7 @@ local Players = require("src.entities")
 local Scenes = require("src.game.scenes")
 
 
+-- TODO: Refactor rootUIObject with presentedUI in base UI
 ---@class Game: UI
 ---@field rootUIObject UI?
 ---@field players Players
@@ -32,8 +33,14 @@ function Game:processMouseEvent(event)
    end
 end
 
+function Game:startTheGame()
+   self.rootUIObject = self.scenes:initLevel()
+   self.rootUIObject:load()
+end
+
+-- Life cycle
+
 function Game:load()
-   self.className = "Game"
    self:setupMainControl()
    self.players = Players:new()
    self.scenes = Scenes:new()
@@ -61,6 +68,7 @@ end
 
 --Private methods
 
+---@private
 function Game:setupMainControl()
    if love.joystick.getJoystickCount() == 0 then
       self.mainControl = "mouse"

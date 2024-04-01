@@ -189,13 +189,7 @@ end
 
 ---@private
 function SceneSelection:configureScenePreview()
-   local w, h = love.window.getMode()
-   local image = Game.scenes.currentScene.backgroundImage
-   local scaleX, scaleY = w / image:getWidth(), h / image:getHeight()
-   local texture = Texture:new(
-      image,
-      Vector2D:new(scaleX, scaleY)
-   )
+   local texture = Game.scenes.currentScene:getBackgroundTexture()
 
    self:updateTexture(texture)
 end
@@ -211,7 +205,9 @@ end
 
 ---@private
 function SceneSelection:presentStartGameConfigurmationDialog()
-   local alert = Alert:new()
+   local alert = Alert:new(
+      function () Game:startTheGame() end
+   )
 
    self:present(alert)
 end

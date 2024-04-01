@@ -1,4 +1,7 @@
 local wf = require("libs.windfield")
-local world = wf.newWorld(Config.gravity.x, Config.gravity.y)
 
-return world
+
+local World = wf.newWorld(Config.gravity.x, Config.gravity.y)
+
+
+return World

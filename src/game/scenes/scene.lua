@@ -1,4 +1,5 @@
 local LifeCycle = require("src.ui.interface.life_cycle")
+local Texture = require("src.ui.view.texture")
 
 
 ---@class SceneFrame
@@ -43,6 +44,18 @@ function Scene:new(name, image, playerSpawnPos, frame, floor)
 end
 
 -- Public methods
+
+---@return Texture
+function Scene:getBackgroundTexture()
+   local w, h = love.window.getMode()
+   local image = self.backgroundImage
+   local scaleX, scaleY = w / image:getWidth(), h / image:getHeight()
+
+   return Texture:new(
+      image,
+      Vector2D:new(scaleX, scaleY)
+   )
+end
 
 ---@return Scene
 function Scene:createDebug()

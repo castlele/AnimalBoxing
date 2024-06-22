@@ -3,4 +3,6 @@
 Package.resolved
 
 # Linux
-Linux*
+*.d
+*.o
+*.swiftdeps*

@@ -1,11 +1,12 @@
 import Engine
-import Raylib
 
 final class GameLoop {
+
+    private var currentScene = Scene.playground
+    private lazy var currentSceneView = currentScene.scene
+
+    // TODO: Separate start and update methods
     func start() {
-        print("Hello")
-        Raylib.beginDrawing()
-        Raylib.drawRectangle(0, 0, 100, 50, .green)
-        Raylib.endDrawing()
+        currentSceneView.start()
     }
 }

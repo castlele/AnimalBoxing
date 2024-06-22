@@ -32,7 +32,6 @@ public final class RaylibWindow: Window {
 
     public func update() {
         Raylib.beginDrawing()
-        Raylib.clearBackground(.red)
 
         if Raylib.isKeyDown(.letterB) {
             windowManager?.showDebugWindows()

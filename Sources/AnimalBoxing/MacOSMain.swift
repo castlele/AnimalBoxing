@@ -25,6 +25,7 @@ private final class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         let mainWindow = RaylibWindow(800, 600, "AnimalBoxing")
+        mainWindow.draw = gameLoop
         mainWindow.nativeCloseCallback = {
             NSApplication.shared.windows
                 .filter {

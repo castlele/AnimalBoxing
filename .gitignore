@@ -1,0 +1,6 @@
+# SPM
+.build
+Package.resolved
+
+# Linux
+Linux*

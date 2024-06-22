@@ -1,3 +1,4 @@
+#if os(macOS)
 import Cocoa
 import Engine
 import RaylibC
@@ -42,3 +43,4 @@ private final class AppDelegate: NSObject, NSApplicationDelegate {
         windowManager.update()
     }
 }
+#endif

@@ -37,14 +37,13 @@ public final class WindowManager {
         #endif
     }
 
-    public func update(gameLoop: (() -> Void)? = nil) {
+    public func update() {
         guard let mainWindow else {
             fatalError("You should call `initMainWindow(_:_:_:)` first")
         }
 
         while !mainWindow.shouldClose {
             mainWindow.update()
-            gameLoop?()
             debugWindows.forEach { $0.update() }
         }
 

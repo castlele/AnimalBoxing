@@ -4,8 +4,8 @@ import Engine
 import RaylibC
 
 enum MacOSMain {
-    static func run(_ gameLoop: @escaping () -> Void) {
-        let delegate = AppDelegate(gameLoop)
+    static func run() {
+        let delegate = AppDelegate()
         NSApplication.shared.delegate = delegate
 
         _ = NSApplicationMain(CommandLine.argc, CommandLine.unsafeArgv)
@@ -16,16 +16,13 @@ enum MacOSMain {
 
 private final class AppDelegate: NSObject, NSApplicationDelegate {
 
-    private var windowManager = WindowManager()
-    private var gameLoop: () -> Void
-
-    init(_ gameLoop: @escaping () -> Void) {
-        self.gameLoop = gameLoop
-    }
+    private let windowManager = WindowManager()
+    private let gameLoop = GameLoop()
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         let mainWindow = RaylibWindow(800, 600, "AnimalBoxing")
-        mainWindow.draw = gameLoop
+        mainWindow.drawCallback = gameLoop.draw
+        mainWindow.updateCallback = gameLoop.update
         mainWindow.nativeCloseCallback = {
             NSApplication.shared.windows
                 .filter {

@@ -1,22 +1,12 @@
 import Engine
 
-final class Player: DrawingPrimitive2D {
+final class Player: BaseDrawingPrimitive2D {
 
-    let drawingEngine = DrawingEngine.raylib
+    init() {
+        super.init(drawingEngine: .raylib)
 
-    var size = Size(100, 50)
-    var position = DVector2D.zero
-    var backgroundColor = DrawingColor.red
-
-    private var isStarted = false
-
-    func start() {
-        guard isStarted else {
-            // TODO: Start methods should run only once in the future
-            // fatalError("")
-            return
-        }
-
-        isStarted = true
+        size = Size(100, 50)
+        position = DVector2D.zero
+        backgroundColor = DrawingColor.red
     }
 }

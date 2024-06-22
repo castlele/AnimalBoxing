@@ -2,7 +2,8 @@ import Raylib
 
 public final class RaylibWindow: Window {
 
-    public var draw: (() -> Void)?
+    public var updateCallback: (() -> Void)?
+    public var drawCallback: (() -> Void)?
     public var shouldClose: Bool {
         Raylib.windowShouldClose
     }
@@ -37,7 +38,8 @@ public final class RaylibWindow: Window {
             windowManager?.showDebugWindows()
         }
 
-        draw?()
+        updateCallback?()
+        drawCallback?()
 
         Raylib.endDrawing()
     }

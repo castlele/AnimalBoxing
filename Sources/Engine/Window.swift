@@ -1,5 +1,6 @@
 public protocol Window: AnyObject {
-    var draw: (() -> Void)? { get set }
+    var updateCallback: (() -> Void)? { get set }
+    var drawCallback: (() -> Void)? { get set }
     var shouldClose: Bool { get }
     var windowManager: WindowManager? { get set }
     var isHidden: Bool { get set }

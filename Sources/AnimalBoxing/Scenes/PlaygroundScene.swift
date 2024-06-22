@@ -1,15 +1,20 @@
 import Engine
 
-final class PlaygroundScene: SceneView {
+final class PlaygroundScene: BaseScenePrimitive2D {
 
     let scene = Scene.playground
 
     private let player = Player()
 
-    func start() {
-        DrawingEngine.raylib.set(clearColor: .white)
+    override init() {
+        super.init()
 
-        player.start()
-        player.update()
+        setup()
+    }
+
+    // MARK: - Private Methods
+
+    private func setup() {
+        addDrawable(player)
     }
 }

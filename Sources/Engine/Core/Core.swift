@@ -1,4 +1,6 @@
 public protocol Core {
+    func isKeyPressed(_ key: Key) -> Bool
+
     func set(clearColor: DrawingColor)
     func drawRectangle(
         x: Int,

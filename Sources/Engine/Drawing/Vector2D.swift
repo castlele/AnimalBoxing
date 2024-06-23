@@ -1,7 +1,7 @@
 public struct Vector2D<T: Numeric> {
 
-    public let x: T
-    public let y: T
+    public var x: T
+    public var y: T
 
     public init(_ x: T, _ y: T) {
         self.x = x

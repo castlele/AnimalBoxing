@@ -1,12 +1,20 @@
 import Raylib
 
-public final class RaylibCore: Core {
+final class RaylibCore: Core {
 
-    public func set(clearColor: DrawingColor) {
+    // MARK: - Keyboard Listening
+
+    func isKeyPressed(_ key: Key) -> Bool {
+        Raylib.isKeyPressed(key.asRaylibKey)
+    }
+
+    // MARK: - Drawing
+
+    func set(clearColor: DrawingColor) {
         Raylib.clearBackground(clearColor.asRaylibColor)
     }
 
-    public func drawRectangle(
+    func drawRectangle(
         x: Int,
         y: Int,
         width: Int,

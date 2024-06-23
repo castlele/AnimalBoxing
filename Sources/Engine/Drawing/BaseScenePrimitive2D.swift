@@ -1,5 +1,7 @@
 open class BaseScenePrimitive2D: ScenePrimitive2D {
 
+    public var drawingEngine: DrawingEngine
+
     public private(set) var drawables = [DrawingPrimitive2D]()
     public var backgroundColor = DrawingColor.white
 
@@ -7,12 +9,14 @@ open class BaseScenePrimitive2D: ScenePrimitive2D {
         drawables.append(drawable)
     }
 
-    public init() { }
+    public init(drawingEngine: DrawingEngine) {
+        self.drawingEngine = drawingEngine
+    }
 
     // MARK: - ScenePrimitive2D
 
     open func draw() {
-        DrawingEngine.raylib.set(clearColor: .white)
+        DrawingEngine.raylib.set(clearColor: backgroundColor)
 
         drawables.forEach { $0.draw() }
     }

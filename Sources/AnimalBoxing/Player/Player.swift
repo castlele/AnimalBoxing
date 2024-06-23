@@ -2,8 +2,10 @@ import Engine
 
 final class Player: BaseDrawingPrimitive2D {
 
-    init() {
-        super.init(drawingEngine: .raylib)
+    public var isUserInteractionsEnabled = true
+
+    override init(drawingEngine: DrawingEngine) {
+        super.init(drawingEngine: drawingEngine)
 
         size = Size(100, 50)
         position = DVector2D.zero
@@ -13,14 +15,14 @@ final class Player: BaseDrawingPrimitive2D {
     override func update() {
         super.update()
 
-        if KeyboardListener.raylib.isKeyPressed(.letterA) {
+        guard isUserInteractionsEnabled else { return }
+
+        if drawingEngine.isKeyPressed(.letterA) {
             position.x -= 10
         }
 
-        if KeyboardListener.raylib.isKeyPressed(.letterD) {
+        if drawingEngine.isKeyPressed(.letterD) {
             position.x += 10
         }
     }
 }
-
-

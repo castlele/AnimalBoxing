@@ -1,4 +1,4 @@
-public final class DrawingEngine {
+public final class DrawingEngine: Core {
 
     private var core: Core
 
@@ -6,11 +6,37 @@ public final class DrawingEngine {
         self.core = core
     }
 
+    // MARK: - Mouse Events
+
+    public func isLeftMouseButtonDown() -> Bool {
+        core.isLeftMouseButtonDown()
+    }
+
+    public func isLeftMouseButtonUp() -> Bool {
+        core.isLeftMouseButtonUp()
+    }
+
+    public func getMousePosition() -> DVector2D {
+        core.getMousePosition()
+    }
+
+    // MARK: - Keyboard Events
+
+    public func isKeyPressed(_ key: Key) -> Bool {
+        core.isKeyPressed(key)
+    }
+
+    public func isKeyDown(_ key: Key) -> Bool {
+        core.isKeyDown(key)
+    }
+
+    // MARK: - Drawing
+
     public func set(clearColor: DrawingColor) {
         core.set(clearColor: clearColor)
     }
 
-    public func rectangle(
+    public func drawRectangle(
         x: Int,
         y: Int,
         width: Int,

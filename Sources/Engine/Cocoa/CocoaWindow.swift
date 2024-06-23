@@ -26,7 +26,8 @@ final class MainViewController: NSViewController {
 
 final public class CocoaWindow: NSWindow, Window {
 
-    public var draw: (() -> Void)?
+    public var updateCallback: (() -> Void)?
+    public var drawCallback: (() -> Void)?
     public var shouldClose: Bool { false }
     public weak var windowManager: WindowManager?
     public var isHidden: Bool {

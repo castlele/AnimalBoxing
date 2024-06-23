@@ -34,10 +34,6 @@ public final class RaylibWindow: Window {
     public func update() {
         Raylib.beginDrawing()
 
-        if Raylib.isKeyDown(.letterB) {
-            windowManager?.showDebugWindows()
-        }
-
         updateCallback?()
         drawCallback?()
 

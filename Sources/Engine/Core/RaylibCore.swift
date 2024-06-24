@@ -2,6 +2,22 @@ import Raylib
 
 final class RaylibCore: Core {
 
+    // MARK: - Window Management
+
+    func initWindow(
+        _ width: Int,
+        _ height: Int,
+        _ title: String,
+        _ nativeCloseCallback: (() -> Void)?
+    ) -> Window {
+        RaylibWindow(
+            Int32(width),
+            Int32(height),
+            title,
+            nativeCloseCallback
+        )
+    }
+
     // MARK: - Mouse Listening
 
     func isLeftMouseButtonDown() -> Bool {

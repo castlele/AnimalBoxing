@@ -16,7 +16,7 @@ open class BaseScenePrimitive2D: ScenePrimitive2D {
     // MARK: - ScenePrimitive2D
 
     open func draw() {
-        DrawingEngine.raylib.set(clearColor: backgroundColor)
+        drawingEngine.set(clearColor: backgroundColor)
 
         drawables.forEach { $0.draw() }
     }

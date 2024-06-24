@@ -1,22 +1,21 @@
 import Engine
 
-final class GameLoop {
-
-    private let drawingEngine: DrawingEngine
+final class GameLoop: BaseScenePrimitive2D {
 
     private var currentScene = Scene.playground
     private var currentSceneView: ScenePrimitive2D
 
-    init(engine: DrawingEngine) {
-        drawingEngine = engine
-        currentSceneView = currentScene.createScene(engine: engine)
+    override init(drawingEngine: DrawingEngine) {
+        currentSceneView = currentScene.createScene(engine: drawingEngine)
+
+        super.init(drawingEngine: drawingEngine)
     }
 
-    func draw() {
+    override func draw() {
         currentSceneView.draw()
     }
 
-    func update() {
+    override func update() {
         currentSceneView.update()
     }
 }

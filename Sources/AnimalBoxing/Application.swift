@@ -4,7 +4,7 @@ import OSInfo
 @main
 final class Application {
     static func main() {
-        let gameLoop = GameLoop(engine: .raylib)
+        let gameLoop = GameLoop(drawingEngine: .raylib)
 
         #if os(macOS)
         MacOSMain.run(gameLoop)

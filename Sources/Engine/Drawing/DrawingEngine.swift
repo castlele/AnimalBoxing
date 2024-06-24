@@ -6,6 +6,17 @@ public final class DrawingEngine: Core {
         self.core = core
     }
 
+    // MARK: - Window Management
+
+    public func initWindow(
+        _ width: Int,
+        _ height: Int,
+        _ title: String,
+        _ nativeCloseCallback: (() -> Void)?
+    ) -> Window {
+        core.initWindow(width, height, title, nativeCloseCallback)
+    }
+
     // MARK: - Mouse Events
 
     public func isLeftMouseButtonDown() -> Bool {

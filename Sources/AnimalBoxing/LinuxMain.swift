@@ -13,7 +13,7 @@ private class LinuxApplication {
     private let windowManager = WindowManager()
 
     private init(_ gameLoop: GameLoop) {
-
+        self.gameLoop = gameLoop
     }
 
     static func run(_ gameLoop: GameLoop) {
@@ -23,9 +23,13 @@ private class LinuxApplication {
     }
 
     private func run() {
-        let mainWindow = RaylibWindow(800, 600, "AnimalBoxing")
-        mainWindow.drawCallback = gameLoop.draw
-        mainWindow.updateCallback = gameLoop.update
+        let mainWindow = gameLoop.drawingEngine.initWIndow(
+            800,
+            600,
+            "AnimalBoxing",
+            nil
+        )
+        mainWindow.rootScene = gameLoop
 
         windowManager.set(mainWindow: mainWindow)
         windowManager.update()

@@ -25,14 +25,8 @@ private final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        let mainWindow = RaylibWindow(800, 600, "AnimalBoxing")
-        mainWindow.drawCallback = gameLoop.draw
-        mainWindow.updateCallback = gameLoop.update
-        mainWindow.nativeCloseCallback = {
+        let mainWindow = gameLoop.drawingEngine.initWindow(800, 600, "AnimalBoxing") {
             NSApplication.shared.windows
-                .filter {
-                    $0 as? CocoaWindow == nil
-                }
                 .forEach {
                     $0.close()
                 }
@@ -40,9 +34,9 @@ private final class AppDelegate: NSObject, NSApplicationDelegate {
             exit(0)
         }
 
-        windowManager.set(mainWindow: mainWindow)
-        windowManager.debug()
+        mainWindow.rootScene = gameLoop
 
+        windowManager.set(mainWindow: mainWindow)
         windowManager.update()
     }
 }

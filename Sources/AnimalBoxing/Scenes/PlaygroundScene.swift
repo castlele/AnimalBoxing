@@ -8,8 +8,8 @@ final class PlaygroundScene: BaseScenePrimitive2D {
     private var isEditing = false
     private var isPlayerPinched = false
 
-    init() {
-        super.init(drawingEngine: .raylib)
+    override init(drawingEngine: DrawingEngine) {
+        super.init(drawingEngine: drawingEngine)
 
         setup()
     }

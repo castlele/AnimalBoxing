@@ -1,11 +1,10 @@
 #if os(macOS)
 import Cocoa
 import Engine
-import RaylibC
 
 enum MacOSMain {
-    static func run() {
-        let delegate = AppDelegate()
+    static func run(_ gameLoop: GameLoop) {
+        let delegate = AppDelegate(gameLoop)
         NSApplication.shared.delegate = delegate
 
         _ = NSApplicationMain(CommandLine.argc, CommandLine.unsafeArgv)
@@ -16,8 +15,14 @@ enum MacOSMain {
 
 private final class AppDelegate: NSObject, NSApplicationDelegate {
 
+    private let gameLoop: GameLoop
     private let windowManager = WindowManager()
-    private let gameLoop = GameLoop()
+
+    init(_ gameLoop: GameLoop) {
+        self.gameLoop = gameLoop
+
+        super.init()
+    }
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         let mainWindow = RaylibWindow(800, 600, "AnimalBoxing")

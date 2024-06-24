@@ -2,8 +2,15 @@ import Engine
 
 final class GameLoop {
 
+    private let drawingEngine: DrawingEngine
+
     private var currentScene = Scene.playground
-    private lazy var currentSceneView = currentScene.scene
+    private var currentSceneView: ScenePrimitive2D
+
+    init(engine: DrawingEngine) {
+        drawingEngine = engine
+        currentSceneView = currentScene.createScene(engine: engine)
+    }
 
     func draw() {
         currentSceneView.draw()

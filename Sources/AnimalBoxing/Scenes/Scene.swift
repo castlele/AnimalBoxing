@@ -3,9 +3,9 @@ import Engine
 enum Scene {
     case playground
 
-    var scene: ScenePrimitive2D {
+    func createScene(engine: DrawingEngine) -> ScenePrimitive2D {
         switch self {
-        case .playground: PlaygroundScene()
+        case .playground: PlaygroundScene(drawingEngine: engine)
         }
     }
 }

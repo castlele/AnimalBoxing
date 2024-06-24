@@ -2,20 +2,22 @@
 import Engine
 
 enum LinuxMain {
-    static func run() {
-        LinuxApplication.run()
+    static func run(_ gameLoop: GameLoop) {
+        LinuxApplication.run(gameLoop)
     }
 }
 
 private class LinuxApplication {
 
+    private let gameLoop: GameLoop
     private let windowManager = WindowManager()
-    private let gameLoop = GameLoop()
 
-    private init() {}
+    private init(_ gameLoop: GameLoop) {
 
-    static func run() {
-        let app = LinuxApplication()
+    }
+
+    static func run(_ gameLoop: GameLoop) {
+        let app = LinuxApplication(gameLoop)
 
         app.run()
     }

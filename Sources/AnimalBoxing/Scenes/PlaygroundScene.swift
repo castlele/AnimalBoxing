@@ -17,6 +17,8 @@ final class PlaygroundScene: BaseScenePrimitive2D {
     override func update() {
         super.update()
 
+        resetSceneIfNeeded()
+
         let isControl = drawingEngine.isKeyDown(.leftControl)
         let isLetterB = drawingEngine.isKeyDown(.letterB)
 
@@ -46,6 +48,20 @@ final class PlaygroundScene: BaseScenePrimitive2D {
     // MARK: - Private Methods
 
     private func setup() {
+        resetScene()
         addDrawable(player)
+    }
+
+    private func resetSceneIfNeeded() {
+        let isControl = drawingEngine.isKeyDown(.leftControl)
+        let isLetterR = drawingEngine.isKeyDown(.letterR)
+
+        if isControl, isLetterR {
+            resetScene()
+        }
+    }
+
+    private func resetScene() {
+        player.position = DVector2D.zero
     }
 }

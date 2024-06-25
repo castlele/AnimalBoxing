@@ -8,7 +8,6 @@ final class Player: BaseDrawingPrimitive2D {
         super.init(drawingEngine: drawingEngine)
 
         size = Size(100, 50)
-        position = DVector2D.zero
         backgroundColor = DrawingColor.red
     }
 
@@ -17,12 +16,14 @@ final class Player: BaseDrawingPrimitive2D {
 
         guard isUserInteractionsEnabled else { return }
 
-        if drawingEngine.isKeyPressed(.letterA) {
+        if drawingEngine.isKeyDown(.letterA) {
             position.x -= 10
         }
 
-        if drawingEngine.isKeyPressed(.letterD) {
+        if drawingEngine.isKeyDown(.letterD) {
             position.x += 10
         }
+
+        position.y += 10
     }
 }

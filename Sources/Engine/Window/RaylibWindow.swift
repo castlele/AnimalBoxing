@@ -31,6 +31,8 @@ final class RaylibWindow: Window {
     }
 
     func update() {
+        // TODO: Move to configuration object or create separate function for that
+        Raylib.setTargetFPS(60)
         Raylib.beginDrawing()
 
         rootScene?.update()

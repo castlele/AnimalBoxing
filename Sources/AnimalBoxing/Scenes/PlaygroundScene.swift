@@ -8,6 +8,16 @@ final class PlaygroundScene: BaseScenePrimitive2D {
     private var isEditing = false
     private var isPlayerPinched = false
 
+    // TODO: Better approaches?
+    private let map = [
+        ["", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", ""],
+        ["x", "x", "x", "x", "x", "x", "x", "x"],
+    ]
+
     override init(drawingEngine: DrawingEngine) {
         super.init(drawingEngine: drawingEngine)
 
@@ -18,6 +28,7 @@ final class PlaygroundScene: BaseScenePrimitive2D {
         super.update()
 
         resetSceneIfNeeded()
+        updatePhysics()
 
         let isControl = drawingEngine.isKeyDown(.leftControl)
         let isLetterB = drawingEngine.isKeyDown(.letterB)
@@ -45,11 +56,39 @@ final class PlaygroundScene: BaseScenePrimitive2D {
         }
     }
 
+    override func draw() {
+        super.draw()
+
+        // TODO: refactor
+        map.enumerated().forEach { rowIndex, row in
+            row.enumerated().forEach { columnIndex, column in
+                if column == "x" {
+                    drawingEngine.drawRectangle(
+                        x: 100 * columnIndex,
+                        y: 100 * rowIndex,
+                        width: 100,
+                        height: 100,
+                        color: .green
+                    )
+                }
+            }
+        }
+    }
+
     // MARK: - Private Methods
 
     private func setup() {
         resetScene()
         addDrawable(player)
+    }
+
+    private func updatePhysics() {
+        let maxY = player.position.y + player.size.height
+
+        // TODO: Should be count depending on the screen size
+        if maxY > 500 {
+            player.position.y = 500 - player.size.height
+        }
     }
 
     private func resetSceneIfNeeded() {

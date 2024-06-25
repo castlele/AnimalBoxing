@@ -14,6 +14,8 @@ final class Player: BaseDrawingPrimitive2D {
     override func update() {
         super.update()
 
+        position.y += 10
+
         guard isUserInteractionsEnabled else { return }
 
         if drawingEngine.isKeyDown(.letterA) {
@@ -24,6 +26,8 @@ final class Player: BaseDrawingPrimitive2D {
             position.x += 10
         }
 
-        position.y += 10
+        if drawingEngine.isKeyDown(.space) {
+            position.y -= 20
+        }
     }
 }

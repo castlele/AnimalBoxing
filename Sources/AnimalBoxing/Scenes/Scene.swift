@@ -1,4 +1,4 @@
-import Engine
+import CastleEngine
 
 enum Scene {
     case playground

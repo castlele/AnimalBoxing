@@ -1,4 +1,4 @@
-import Engine
+import CastleEngine
 
 final class PlaygroundScene: BaseScenePrimitive2D {
 

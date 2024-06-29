@@ -1,5 +1,5 @@
 #if os(Linux)
-import Engine
+import CastleEngine
 
 enum LinuxMain {
     static func run(_ gameLoop: GameLoop) {

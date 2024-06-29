@@ -1,6 +1,6 @@
 #if os(macOS)
 import Cocoa
-import Engine
+import CastleEngine
 
 enum MacOSMain {
     static func run(_ gameLoop: GameLoop) {

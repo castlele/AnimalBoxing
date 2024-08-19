@@ -1,8 +1,18 @@
 # SPM
 .build
+.swiftpm
 Package.resolved
 
-# Linux
+# Artifacts
+bin/
+build/
 *.d
 *.o
 *.swiftdeps*
+.cache/
+
+# IDE
+compile_commands.json
+
+# Todo
+TODO.*

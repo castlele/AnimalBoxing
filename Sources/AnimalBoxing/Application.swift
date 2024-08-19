@@ -2,16 +2,14 @@ import CastleEngine
 import OSInfo
 
 @main
-final class Application {
-    static func main() {
-        let gameLoop = GameLoop(drawingEngine: .raylib)
+final class ApplicationEntry {
+    static let delegate = AnimalBoxingApplicationDelegate()
 
-        #if os(macOS)
-        MacOSMain.run(gameLoop)
-        #elseif os(Linux)
-        LinuxMain.run(gameLoop)
-        #else
-        fatalError("Platform \(OS.current.name) unsupported")
-        #endif
+    static func main() {
+        let app = Application()
+
+        app.delegate = delegate
+
+        app.run()
     }
 }

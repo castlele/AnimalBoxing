@@ -25,14 +25,7 @@ private final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        let mainWindow = gameLoop.drawingEngine.initWindow(800, 600, "AnimalBoxing") {
-            NSApplication.shared.windows
-                .forEach {
-                    $0.close()
-                }
-
-            exit(0)
-        }
+        let mainWindow = gameLoop.drawingEngine.initWindow(800, 600, "AnimalBoxing", nil)
 
         mainWindow.rootScene = gameLoop
 

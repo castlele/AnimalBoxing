@@ -1,30 +1,42 @@
 #include <libcastle.h>
 #include <memory>
 
+#include "scenes/playground.h"
+
 using namespace castle;
 
-#define FONT_SIZE 60.0
+#define TARGET_FPS 60
+#define INITIAL_WINDOW_W 800
+#define INITIAL_WINDOW_H 600
+
+#define CELL_W 40
+#define CELL_H 40
 
 int main() {
     CoreFactory coreFactory = CoreFactory::Shared();
     std::unique_ptr<castle::Core> core = coreFactory.CreateCore();
+    castle::Size cellSize (CELL_W, CELL_H);
+    castle::Size windowSize (INITIAL_WINDOW_W, INITIAL_WINDOW_H);
 
-    core->InitWindow(Size(800, 600), "Castle Engine Text");
-    core->SetTargetFPS(60);
-
-    Size windowSize = core->GetWindowSize();
-    Vector2D textPos = Vector2D(
-        windowSize.width/2 - FONT_SIZE/2,
-        windowSize.height/2 - FONT_SIZE/2
+    AB::PlaygroundScene playgroundScene (
+        core,
+        AB::InitDefaultPlaygroundMap(),
+        cellSize
     );
+
+    playgroundScene.m_SceneSize = windowSize;
+
+    core->InitWindow(windowSize, "Castle Engine Text");
+    core->SetTargetFPS(TARGET_FPS);
 
     while (!core->WindowShouldClose()) {
         core->BeginDrawing();
 
         core->ClearBackground(Color::White());
 
-        drawPressedKey(core, textPos);
         core->DrawFPS();
+
+        playgroundScene.Draw();
 
         core->EndDrawing();
     }

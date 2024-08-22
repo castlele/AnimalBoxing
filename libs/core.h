@@ -21,12 +21,14 @@ public:
     virtual Size GetWindowSize() = 0;
 
     // Drawing
+    // TODO: Should probably be private in the future
     virtual void BeginDrawing() = 0;
     // TODO: Add color as the parameter
     virtual void ClearBackground(Color color) = 0;
     // TODO: Add color as the parameter
     virtual void DrawText(std::string text, Vector2D pos, int size, Color color) = 0;
     virtual void DrawRect(Vector2D pos, Size size, Color color) = 0;
+    // TODO: Should probably be private in the future
     virtual void EndDrawing() = 0;
 
     // Events listening

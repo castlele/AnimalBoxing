@@ -8,7 +8,7 @@ struct Size {
     real width;
     real height;
 
-    Size(real width, real height) : width(width), height(height) {}
+    Size(real width = 0, real height = 0) : width(width), height(height) {}
 };
 
 } // namespace castle

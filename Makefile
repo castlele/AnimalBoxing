@@ -18,7 +18,9 @@ LOCAL_CASTLE_PATH := ../castle/
 CASTLE_LIB_NAME   := castle
 LIBS              := -L$(LIBS_FOLDER) -lcastle
 SRC               := \
-    $(wildcard src/*.cpp)
+    $(wildcard src/*.cpp) \
+    $(wildcard src/entity/*.cpp) \
+    $(wildcard src/scenes/*.cpp)
 
 OBJECTS           := $(SRC:%.cpp=$(OBJ_DIR)/%.o)
 
@@ -46,7 +48,7 @@ run: all
 	./$(APP_DIR)/$(TARGET)
 
 $(APP_DIR)/$(TARGET): $(OBJECTS)
-	$(CXX) $(CXXFLAGS) $(LIBS) -o $@ $<
+	$(CXX) $(CXXFLAGS) $(LIBS) -o $@ $^
 
 $(OBJ_DIR)/%.o: %.cpp
 	@mkdir -p $(@D)
@@ -54,6 +56,7 @@ $(OBJ_DIR)/%.o: %.cpp
 
 copylibs:
 	@cd $(LOCAL_CASTLE_PATH); \
+		make clean; \
 		make; \
 		cp -R $(BIN)/* ../$(PROJECT_NAME)/$(LIBS_FOLDER)
 

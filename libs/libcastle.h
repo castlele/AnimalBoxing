@@ -7,5 +7,7 @@
 #include "math/vector2d.h"
 #include "math/size.h"
 
+#include "drawing/view.h"
+
 #include "core.h"
 #include "corefactory.h"
